@@ -1,0 +1,110 @@
+
+
+
+#Introductory Information
+print('''
+            HNG TECH
+    EMPLOYEE INFORMATION FORM
+
+Please Note the Following Instructions Before filling the form:
+1. Fill the Form Below Accurately;
+2. A Password will be automatically created for you after you fill in your details;
+3. If you are not satisfied with the password generated, you can choose to generate one yourself.
+''')
+
+import string
+import random
+
+#collect employee information
+def employee_information():
+    first_name = input('FIRST NAME: ').upper()
+    last_name = input('LAST NAME: ').upper()
+    email = input('EMAIL ADDRESS: ').lower()
+
+    user_data = [first_name,last_name,email]
+    return user_data
+
+#create password using employee information
+def create_password(user_data):
+    characters = string.ascii_letters
+    length = 5
+    random_password = ''.join(random.choice(characters)for i in range(length))
+    password = str(user_data[0][0:2] + user_data[1][-2:] + random_password)
+    return password
+
+print(create_password)
+
+status = True
+container = []
+
+users = {}
+user_number = 1
+
+while status:
+    user_data = employee_information()
+    #show user created password
+    password = create_password(user_data)
+    print('Your password is: ' + password)
+
+    #ask user if he/she is satisfied with
+    password_okay = input('''
+Are you satisfied with the generated password? If you are, enter YES; 
+If you are not, enter NO and input your preferred password: ''').upper()
+    password_loop = True
+
+    while password_loop:
+
+        if password_okay == 'YES':
+            #add password to user data dictionary
+            user_data.append(password)
+
+            #add user details to overall container
+            container.append(user_data)
+
+            users[user_number] = user_data
+
+            password_loop = False
+            break
+
+        else:
+            #prompt user to choose new password
+            new_password = input('Choose and input password longer than or equal to 7 characters: ')
+            #password length loop
+            password_len = True
+
+            while password_len:
+                if len(new_password) >= 7:
+                    #add password to user data dictionary
+                    user_data.append(new_password)
+
+                    #add user data to container
+                    container.append(user_data)
+                    users[user_number] = user_data
+
+                    #break out of password length check loop
+                    password_len = False
+
+                    #break out of the whole password loop
+                    password_loop = False
+                    break
+                else:
+                    print('Your password is less than 7 characters')
+                    new_password = input('Choose and input another password longer than or equal to 7 characters: ')
+
+    print('Good Job! Your Information has been saved!')
+
+#for new user
+    new_user = input(str('Would you like to enter a new user? Yes or No?: ')).upper()
+    if new_user == 'NO':
+        status = False
+        for item in users:
+            print(users.get(item))
+    else:
+        status = True
+        user_number = user_number + 1
+
+print('''
+Employee Information Form is Complete
+Thank you!
+Exit Page
+''')
